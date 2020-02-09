@@ -1,0 +1,5 @@
+# ignore file for git
+
+*.iso
+*.tar
+*.bz2

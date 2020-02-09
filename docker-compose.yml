@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+   gentoo_packer:
+      image: ${REGISTRY_URL}/${IMAGE_NAME}:${VERSION}
+      build: 
+         context: ./packer
+      entrypoint: "bash -c"
+      command: "'while sleep 3600; do :; done'"
+      stdin_open: true
+      tty: true
+      volumes:
+         - "./assets:/packer/"
