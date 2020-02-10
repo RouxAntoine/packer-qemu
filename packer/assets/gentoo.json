@@ -1,0 +1,101 @@
+{
+  "builders":
+  [
+    {
+      "type": "qemu",
+      "accelerator": "kvm",
+      "headless": true,
+      "qemuargs": [ 
+	 ["-boot", "b" ],
+	 ["-device", "virtio-rng-pci"]
+      ],
+      "memory": "1024",
+      "cpus": "2",
+      "disk_interface": "virtio",
+      "disk_size": "5000M",
+      "disk_image": "true",
+      "use_backing_file": "true",
+      "format": "qcow2",
+      "net_device": "virtio-net",
+
+      "iso_urls": [
+        "/packer/install-amd64-minimal-{{user `version`}}.iso",
+	"http://distfiles.gentoo.org/releases/amd64/autobuilds/{{user `version`}}/install-amd64-minimal-{{user `version`}}.iso"
+      ],
+      "iso_checksum_url": "http://distfiles.gentoo.org/releases/amd64/autobuilds/{{user `version`}}/install-amd64-minimal-{{user `version`}}.iso.DIGESTS.asc",
+      "iso_checksum_type": "file",
+
+      "vm_name": "gentoo_packer",
+      "output_directory": "output_gentoo_qcow2",
+      
+      "http_directory": "/packer/httpdir",
+      "http_port_min": 10082,
+      "http_port_max": 10082,
+
+      "ssh_host_port_min": 2229,
+      "ssh_host_port_max": 2229,
+
+      "ssh_host": "127.0.0.1",
+      "ssh_port": "22",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+
+      "ssh_wait_timeout": "900m",
+
+      "vnc_port_min": "5900",
+      "vnc_port_max": "5900",
+
+      "boot_wait": "3s",
+      "boot_command":
+      [
+	"gentoo-nofb",
+        "<enter>",
+        "<wait5>",
+        "<enter>",
+        "<wait15s>",
+        "passwd {{user `ssh_username`}}",
+        "<enter>",
+        "<wait>",
+        "{{user `ssh_password`}}",
+        "<enter>",
+        "<wait>",
+        "{{user `ssh_password`}}",
+        "<enter>",
+        "<wait>",
+        "sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config",
+        "<enter>",
+        "<wait>",
+        "echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config",
+        "<enter>",
+        "<wait>",
+        "/etc/init.d/sshd start",
+        "<enter>",
+        "<wait>"     	
+      ],
+
+      "shutdown_command": "shutdown -P now"
+    }
+  ],
+  "provisioners":
+  [
+    {
+      "type": "file",
+      "source": "/packer/id_rsa_qemu.pub",
+      "destination": "/root/.ssh/authorized_keys"
+    },
+    {
+     "type": "shell",
+     "inline": [
+	"chown root:root /root/.ssh/authorized_keys",
+	"chmod 600 /root/.ssh/authorized_keys",
+        "sed -i 's/^SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config",
+	"echo package_upgrade: true >>/etc/cloud/cloud.cfg"
+      ]
+    }
+  ],
+  "variables": {
+     "ssh_username": "root",
+     "ssh_password": "CHANGEME",
+     "version": "20200205T214502Z"
+  }
+}

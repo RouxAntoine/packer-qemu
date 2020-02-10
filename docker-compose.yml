@@ -9,5 +9,12 @@ services:
       command: "'while sleep 3600; do :; done'"
       stdin_open: true
       tty: true
+      privileged: true
       volumes:
-         - "./assets:/packer/"
+         - "./packer/assets:/packer/"
+      network_mode: "host"
+      #ports:
+      #    - "5959:5959"
+      #    - "2222:2229"
+      #    - "8888:10082"
+
