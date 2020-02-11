@@ -3,6 +3,7 @@
 *.iso
 *.tar
 *.bz2
+.env
 
 packer/assets/id_rsa_qemu*
 packer/assets/packer_cache/

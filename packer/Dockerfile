@@ -1,5 +1,9 @@
 FROM hashicorp/packer:1.5.1
 
+ARG PROXY=""
+ENV http_proxy="${PROXY}"
+ENV https_proxy="${PROXY}"
+
 ARG USER=packer
 ARG GROUP=packer
 
