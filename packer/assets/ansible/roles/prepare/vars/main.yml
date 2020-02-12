@@ -1,0 +1,7 @@
+---
+# ssh variable
+
+
+generated_user: "{{ ansible_user  }}"
+generated_group: ""
+user_home: "{% if generated_user == 'root'  %} /root  {% else %} /home/{{ generated_user }} {% endif %}"

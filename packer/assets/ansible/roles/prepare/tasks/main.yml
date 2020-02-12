@@ -1,0 +1,8 @@
+---
+# prepare gentoo iso to setup gentoo
+
+- name: "Check if remote had network connection"
+  shell: "ping -c 3 www.google.fr"
+  register: ping_res
+  failed_when: ping_res.rc != 0
+

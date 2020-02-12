@@ -123,6 +123,20 @@
         "sed -i 's/^SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config",
 	"echo package_upgrade: true >>/etc/cloud/cloud.cfg"
       ]
+    },
+    {
+      "type": "file",
+      "source": "/packer/id_rsa_qemu.pub",
+      "destination": "/root/.ssh/authorized_keys"
+    },
+    {
+     "type": "shell",
+     "inline": [
+	"chown root:root /root/.ssh/authorized_keys",
+	"chmod 600 /root/.ssh/authorized_keys",
+        "sed -i 's/^SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config",
+	"echo package_upgrade: true >>/etc/cloud/cloud.cfg"
+      ]
     }
   ]
 }
