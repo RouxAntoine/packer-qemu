@@ -1,0 +1,13 @@
+---
+# create user and group
+
+- name: "Ensure group {{ generated_group }} exists"
+  group:
+    name: "{{ generated_group }}"
+
+- name: "create {{ generated_user }} user and {{ generated_group }} group"
+  user:
+    name: "{{ generated_user }}"
+    comment: "Login user generate by ansible"
+    group: "{{ generated_group }}"
+

@@ -8,7 +8,3 @@ qemu-system-x86_64 \
     -device virtio-net,netdev=user.0 \
     -netdev user,id=user.0,hostfwd=tcp::5556-:22
 
-
-# run playbook on aready running qemu vm
-# ansible-playbook -i inventory_test.ini playbook.yml --extra-vars "ssh_pub=$(cat ../id_rsa_qemu) geenrated_user=antoine generated_group=antoine"
-

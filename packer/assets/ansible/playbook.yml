@@ -14,4 +14,5 @@
         fail_msg: "Pass param ssh_pub, generated_user and generated_group to launch this playbook"
   roles:
      - prepare
+     - setup
 
