@@ -86,7 +86,8 @@
       "playbook_file": "/packer/ansible/playbook.yml",
       "extra_arguments": [ "--extra-vars", "ssh_pub={{user `ssh_pub_key`}} generated_user={{user `generated_user`}} generated_group={{user `generated_group`}}" ],
       "groups": "default",
-      "user": "root"
+      "user": "root",
+      "ansible_env_vars": [ "ANSIBLE_HOST_KEY_CHECKING=False" ]
     }
   ],
   "variables": {

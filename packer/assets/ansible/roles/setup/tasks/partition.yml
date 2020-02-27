@@ -3,10 +3,34 @@
 
 - name: "Create a new primary partition for LVM"
   parted:
-    device: /dev/sda
-    name: "root"
+    device: "{{ devices_path }}"
+    name: "{{ item.name  }}"
     label: gpt
-    number: 1
+    number: "{{ ansible_loop.index }}"
     flags: [ lvm ]
     state: present
+    part_end: "100%"
+  loop: "{{ devices_system }}"
+  loop_control:
+    extended: yes
+
+- name: "Create vg and add disk to it"
+  lvg:
+    vg: vg_system
+    pvs: "{{ devices_system | map(attribute='dev') | join(',') }}"
+
+- name: "Create list of lvs"
+  lvol:
+    vg: "vg_system"
+    lv: "{{ item.name  }}"
+    size: "{{ item.size  }}"
+  loop: "{{ lvs }}"
+
+
+
+
+
+
+
+
 

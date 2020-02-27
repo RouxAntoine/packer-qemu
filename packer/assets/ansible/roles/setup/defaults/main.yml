@@ -1,0 +1,29 @@
+---
+# default variable relative to paritionning
+
+devices_path: /dev/sda
+devices_system: 
+  - name: root
+    dev: /dev/sda1
+lvs:
+  - name: "bios"
+    size: "2M"
+    type: "bootloader"
+    descr: "BIOS boot partition"
+  - name: "boot"
+    size: "128M"
+    type: "ext2"
+    descr: "Boot/EFI system partition"
+  - name: "swap"
+    size: "1G"
+    type: "swap"
+    descr: "Swap partition"
+  - name: "root"
+    size: "22G"
+    type: "ext4"
+    descr: "Root partition"
+  - name: "home"
+    size: "7G"
+    type: "ext4"
+    descr: "home partition"
+

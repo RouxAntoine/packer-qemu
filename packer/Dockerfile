@@ -1,4 +1,4 @@
-FROM hashicorp/packer:1.5.1
+FROM hashicorp/packer:1.5.4
 
 ARG PROXY=""
 ENV http_proxy="${PROXY}"
@@ -10,7 +10,8 @@ ARG GROUP=packer
 WORKDIR /packer
 
 RUN apk add --update qemu qemu-system-x86_64 qemu-img \
-        vim htop util-linux gzip sysfsutils openssh-client openssh-keygen sudo ansible
+        vim htop util-linux gzip sysfsutils openssh-client \
+        openssh-keygen sudo ansible sshpass
 
 RUN addgroup -g 1000 "${GROUP}" && \
     adduser -u 1000 -D -G "${GROUP}" "${USER}" && \
