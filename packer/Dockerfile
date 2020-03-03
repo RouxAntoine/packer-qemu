@@ -11,7 +11,7 @@ WORKDIR /packer
 
 RUN apk add --update qemu qemu-system-x86_64 qemu-img \
         vim htop util-linux gzip sysfsutils openssh-client \
-        openssh-keygen sudo ansible sshpass
+        openssh-keygen sudo ansible sshpass curl
 
 RUN addgroup -g 1000 "${GROUP}" && \
     adduser -u 1000 -D -G "${GROUP}" "${USER}" && \

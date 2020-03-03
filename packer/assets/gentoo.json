@@ -22,12 +22,11 @@
       "disk_additional_size": [],
 
       "iso_urls": [
-        "/packer/install-amd64-minimal-{{user `version`}}.iso",
-	"http://distfiles.gentoo.org/releases/amd64/autobuilds/{{user `version`}}/install-amd64-minimal-{{user `version`}}.iso"
+        "/packer/install-amd64-minimal-20200205T214502Z.iso",
+        "http://distfiles.gentoo.org/releases/amd64/autobuilds/current-install-amd64-minimal//install-amd64-minimal-{{user `version`}}.iso"
       ],
-      "iso_checksum_url": "http://distfiles.gentoo.org/releases/amd64/autobuilds/{{user `version`}}/install-amd64-minimal-{{user `version`}}.iso.DIGESTS.asc",
       "iso_checksum_type": "file",
-
+      "iso_checksum_url": "/packer/install-amd64-minimal-20200205T214502Z.iso.DIGESTS",
       "vm_name": "gentoo_packer.qcow2",
       "output_directory": "output_gentoo_qcow2",
       
@@ -87,7 +86,7 @@
       "extra_arguments": [ "--extra-vars", "ssh_pub={{user `ssh_pub_key`}} generated_user={{user `generated_user`}} generated_group={{user `generated_group`}}" ],
       "groups": "default",
       "user": "root",
-      "ansible_env_vars": [ "ANSIBLE_HOST_KEY_CHECKING=False" ]
+      "ansible_env_vars": [ "ANSIBLE_CONFIG=/packer/ansible/ansible.cfg" ]
     }
   ],
   "variables": {

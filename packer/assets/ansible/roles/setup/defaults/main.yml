@@ -2,18 +2,30 @@
 # default variable relative to paritionning
 
 devices_path: /dev/sda
-devices_system: 
-  - name: root
+devices_system:
+  - name: bootloader
     dev: /dev/sda1
+    label: gpt
+    flags: [ bios_grub ]
+    part_start: 0%
+    part_end: 2MiB
+  - name: boot
+    dev: /dev/sda2
+    label: gpt
+    flags: [ boot, esp ]
+    part_start: 2MiB
+    part_end: 128MiB
+    fstype: "ext2"
+  - name: root
+    dev: /dev/sda3
+    label: gpt
+    flags: [ lvm ]
+    part_start: 128MiB
+    part_end: 100%
+    fstype: "lvm"
+
+vg_name: vg_system
 lvs:
-  - name: "bios"
-    size: "2M"
-    type: "bootloader"
-    descr: "BIOS boot partition"
-  - name: "boot"
-    size: "128M"
-    type: "ext2"
-    descr: "Boot/EFI system partition"
   - name: "swap"
     size: "1G"
     type: "swap"

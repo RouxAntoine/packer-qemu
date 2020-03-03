@@ -3,7 +3,6 @@
 
 - hosts: default
   become: true
-  become_method: su
   pre_tasks:
     - name: "check ansible required param"
       assert:

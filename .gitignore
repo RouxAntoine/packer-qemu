@@ -9,3 +9,6 @@
 packer/assets/id_rsa_qemu*
 packer/assets/packer_cache/
 packer/assets/output_gentoo_qcow2/
+
+.idea/
+*.iml

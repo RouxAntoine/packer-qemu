@@ -1,36 +1,58 @@
 ---
 # partition disk to install gentoo
 
-- name: "Create a new primary partition for LVM"
+- name: "Create bios, boot and LVM partition"
   parted:
     device: "{{ devices_path }}"
     name: "{{ item.name  }}"
-    label: gpt
     number: "{{ ansible_loop.index }}"
-    flags: [ lvm ]
+    label: "{{ item.label }}"
+    flags: "{{ item.flags }}"
+    part_start: "{{ item.part_start }}"
+    part_end: "{{ item.part_end }}"
     state: present
-    part_end: "100%"
   loop: "{{ devices_system }}"
   loop_control:
     extended: yes
+  tags:
+    - storage
+
+- name: "Format partition with fstype keyword"
+  filesystem:
+    dev: "{{ item.dev }}"
+    fstype: "{{ item.fstype }}"
+    force: yes
+    resizefs: yes
+  loop: "{{ devices_system }}"
+  when: "item.fstype is defined"
+  tags:
+    - storage
 
 - name: "Create vg and add disk to it"
   lvg:
     vg: vg_system
-    pvs: "{{ devices_system | map(attribute='dev') | join(',') }}"
+    pvs: "{{ item.dev }}"
+    force: yes
+  loop: "{{ devices_system }}"
+  when: "'lvm' in item.flags"
+  tags:
+    - storage
 
 - name: "Create list of lvs"
   lvol:
-    vg: "vg_system"
-    lv: "{{ item.name  }}"
-    size: "{{ item.size  }}"
+    vg: "{{ vg_name }}"
+    lv: "{{ item.name }}"
+    size: "{{ item.size }}"
   loop: "{{ lvs }}"
+  tags:
+    - storage
 
-
-
-
-
-
-
-
-
+- name: "Format lvs partition"
+  filesystem:
+    fstype: "{{ item.type }}"
+    dev: "/dev/{{ vg_name }}/{{ item.name }}"
+    force: yes
+    resizefs: yes
+  loop: "{{ lvs }}"
+  tags:
+    - storage
