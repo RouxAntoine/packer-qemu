@@ -83,7 +83,7 @@
     {
       "type": "ansible",
       "playbook_file": "/packer/ansible/playbook.yml",
-      "extra_arguments": [ "--extra-vars", "ssh_pub={{user `ssh_pub_key`}} generated_user={{user `generated_user`}} generated_group={{user `generated_group`}}" ],
+      "extra_arguments": [ "--extra-vars", "ssh_pub={{user `ssh_pub_key`}} generated_user={{user `generated_user`}} generated_group={{user `generated_group`}} gentoo_version={{user `version`}}" ],
       "groups": "default",
       "user": "root",
       "ansible_env_vars": [ "ANSIBLE_CONFIG=/packer/ansible/ansible.cfg" ]

@@ -18,6 +18,13 @@ RUN addgroup -g 1000 "${GROUP}" && \
     echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER && \
     chmod 0440 /etc/sudoers.d/$USER
 
+# setup mitogen to enhance ansible speed
+ENV MITOGEN_VERSION="0.2.9"
+RUN wget https://networkgenomics.com/try/mitogen-${MITOGEN_VERSION}.tar.gz && \
+    tar xvf mitogen-${MITOGEN_VERSION}.tar.gz && \
+    mv mitogen-${MITOGEN_VERSION} /mitogen && \
+    rm mitogen-${MITOGEN_VERSION}.tar.gz
+
 USER "${USER}"
 
 ENV PACKER_LOG=1

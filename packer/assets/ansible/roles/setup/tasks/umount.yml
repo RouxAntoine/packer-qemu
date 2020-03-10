@@ -1,0 +1,16 @@
+---
+# umount and disabe swap
+
+- name: "disable swap partition"
+  command: "swapoff -a"
+  tags:
+    - umount
+
+- name: "Umount partition"
+  mount:
+    path: "{{ item.mount_dir }}"
+    state: "unmounted"
+  loop: "{{ lvs | reverse | list }}"
+  when: "item.mount_dir is defined"
+  tags:
+    - umount

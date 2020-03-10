@@ -1,0 +1,70 @@
+---
+# retrieve gentoo os and copy it
+
+- name: "Set time"
+  command: "ntpd -q -g"
+  tags:
+    - os
+
+- name: "Retrieve last version"
+  shell: >
+          curl  {{ latest_url }} 2>&1 |
+          awk -F/ '/\/stage3-amd64-[0-9TZ]+.tar.xz/{print $1}'
+  args:
+    warn: no
+  when: "gentoo_version is not defined or gentoo_version == 'lastest'"
+  register: "stage_path"
+  tags:
+    - os
+
+- set_fact:
+    url_dl: "{{ mirror_stage }}/releases/amd64/autobuilds/{{ stage_path.stdout | default(gentoo_version) }}/stage3-amd64-{{ stage_path.stdout | default(gentoo_version) }}.tar.xz"
+  tags:
+    - os
+
+- name: "Download stage3 archive version {{ stage_path.stdout }}"
+  get_url:
+    url: "{{ url_dl }}"
+    dest: "/root/stage3-amd64.tar.xz"
+  register: "archive_downloaded_result"
+  tags:
+    - os
+
+- name: "Extract stage3 archive"
+  unarchive:
+    src: "{{ archive_downloaded_result.dest }}"
+    dest: "{{ mount_base_dir }}"
+    remote_src: yes
+    creates: "{{ mount_base_dir }}/bin"
+  tags:
+    - os
+
+- name: "Mount /proc"
+  mount:
+    src: /proc
+    path: "{{ mount_base_dir }}/proc"
+    state: mounted
+    fstype: proc
+  tags:
+    - os
+
+- name: "Mount /dev bind volume"
+  mount:
+    src: "/{{ item.path }}"
+    path: "{{ mount_base_dir }}/{{ item.path }}"
+    opts: rbind,make-rslave
+    state: mounted
+    fstype: none
+  loop:
+    - path: dev
+    - path: sys
+  tags:
+    - os
+
+- name: "Cleanup Stage3 Archive"
+  file:
+    path: "{{ archive_downloaded_result.dest }}"
+    state: absent
+  when: "debug is not defined or debug == false"
+  tags:
+    - os

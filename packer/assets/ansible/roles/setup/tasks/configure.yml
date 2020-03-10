@@ -1,0 +1,69 @@
+---
+# configure and setup os
+
+- name:
+  set_fact:
+    make_conf:
+      - path: "GENTOO_MIRRORS=\"{{ mirror_source }}\""
+        regexp: "^GENTOO_MIRRORS=\".*\""
+      - path: "COMMON_FLAGS=\"{{ gcc_common_args }}\""
+        regexp: "^COMMON_FLAGS="
+      - path: "MAKEOPTS=\"{{ make_opts }}\""
+        regexp: "^MAKEOPTS="
+  tags:
+    - configure
+
+- name: "Configure Gentoo_mirrors"
+  lineinfile:
+    path: "{{ mount_base_dir }}/etc/portage/make.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.path }}"
+    state: present
+  loop: "{{ make_conf }}"
+  tags:
+    - configure
+
+- name: "Create portage repo conf dir"
+  file:
+    path: "{{ portage_conf_dir_path }}"
+    state: directory
+  tags:
+    - configure
+
+- name: "Copy portage conf file"
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    remote_src: yes
+  loop:
+    - src: "{{ mount_base_dir }}/usr/share/portage/config/repos.conf"
+      dest: "{{ portage_conf_dir_path }}/gentoo.conf"
+    - src: "/etc/resolv.conf"
+      dest: "{{ mount_base_dir }}/etc/resolv.conf"
+  tags:
+    - configure
+
+#- name: create portage directory
+#  command: chroot /mnt/gentoo bash -c 'source /etc/profile; mkdir /usr/portage' creates=/mnt/gentoo/usr/portage
+#  tags:
+#    - chroot
+#
+#- name: emerge-webrsync
+#  command: chroot /mnt/gentoo bash -c 'source /etc/profile; /usr/bin/emerge-webrsync' creates=/mnt/gentoo/usr/portage/xfce-extra
+#  tags:
+#    - chroot
+#
+#- name: set zoneinfo
+#  command: chroot /mnt/gentoo bash -c 'cp /usr/share/zoneinfo/{{ timezone }} /etc/localtime; echo "{{ timezone }}" > /etc/timezone'
+#  tags:
+#    - chroot
+#
+#- name: Configure Hosts File
+#  template: src=hosts dest=/mnt/gentoo/etc/hosts
+#
+#- name: Set Hostname
+#  template: src=hostname dest=/mnt/gentoo/etc/conf.d/hostname
+#
+#
+#- name: Configure Fstab
+#  copy: src=fstab dest=/mnt/gentoo/etc/fstab
