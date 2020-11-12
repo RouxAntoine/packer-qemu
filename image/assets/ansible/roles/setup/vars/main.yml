@@ -1,0 +1,22 @@
+---
+# non overridable variable
+
+vg_name: vg_system
+mount_base_dir: /mnt/gentoo
+mirror_stage: "https://gentoo.osuosl.org"
+latest_url: "{{ mirror_stage }}/releases/amd64/autobuilds/latest-stage3.txt"
+
+# compilation arguments
+mirror_source: >
+  http://gentoo.mirrors.ovh.net/gentoo-distfiles/
+  ftp://ftp.free.fr/mirrors/ftp.gentoo.org/
+  http://ftp.free.fr/mirrors/ftp.gentoo.org/
+  https://mirrors.soeasyto.com/distfiles.gentoo.org/
+  http://mirrors.soeasyto.com/distfiles.gentoo.org/
+  ftp://mirrors.soeasyto.com/distfiles.gentoo.org/
+  http://gentoo.modulix.net/gentoo/
+gcc_common_args: "-march=native -O2 -pipe"
+make_opts: "-j2"
+
+# portage variable
+portage_conf_dir_path: "{{ mount_base_dir }}/etc/portage/repos.conf/"

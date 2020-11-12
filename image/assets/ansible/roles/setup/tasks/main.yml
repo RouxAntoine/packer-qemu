@@ -2,6 +2,9 @@
 # setup gentoo
 
 - import_tasks: partition.yml
+- import_tasks: mount.yml
+- import_tasks: os.yml
+- import_tasks: configure.yml
   #- import_tasks: users.yml
   #- import_tasks: security.yml
 

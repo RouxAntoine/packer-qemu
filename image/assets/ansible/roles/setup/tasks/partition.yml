@@ -38,6 +38,10 @@
   tags:
     - storage
 
+- import_tasks: "umount.yml"
+  tags:
+    - storage
+
 - name: "Create list of lvs"
   lvol:
     vg: "{{ vg_name }}"
@@ -52,7 +56,6 @@
     fstype: "{{ item.type }}"
     dev: "/dev/{{ vg_name }}/{{ item.name }}"
     force: yes
-    resizefs: yes
   loop: "{{ lvs }}"
   tags:
     - storage
