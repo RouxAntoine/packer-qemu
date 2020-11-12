@@ -1,5 +1,5 @@
 ---
-# file: playbook.yml
+# file: playbook-gentoo.yml
 
 - hosts: default
   become: true

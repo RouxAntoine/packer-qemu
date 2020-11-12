@@ -1,23 +1,23 @@
 ---
 # default variable relative to paritionning
 
-devices_path: /dev/sda
+devices_path: /dev/vdb
 devices_system:
   - name: bootloader
-    dev: /dev/sda1
+    dev: "{{ devices_path }}1"
     label: gpt
     flags: [ bios_grub ]
     part_start: 0%
     part_end: 2MiB
   - name: boot
-    dev: /dev/sda2
+    dev: "{{ devices_path }}2"
     label: gpt
     flags: [ boot, esp ]
     part_start: 2MiB
     part_end: 128MiB
     fstype: "ext2"
   - name: root
-    dev: /dev/sda3
+    dev: "{{ devices_path }}3"
     label: gpt
     flags: [ lvm ]
     part_start: 128MiB
